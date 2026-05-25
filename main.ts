@@ -2,9 +2,37 @@
  *
  * Created by: Kyle Matthew
  * Created on: Apr 2026
- * This program has 2 - 28BYJ-48 DC 5V stepper motor and a distance sensor, 
- * if there is an object within 10 cm of the distance sensor, the motors stop, 
- * the card reverses 10 cm, it then turns 90° and then continues moving forward.
+ * This program will move car.
 */
 
-basic.showString('Hello, World!')
+// variables
+let distance = 0
+
+// setup
+basic.showIcon(IconNames.Happy)
+robotbit.MotorStopAll()
+
+// button a
+input.onButtonPressed(Button.A, function () {
+    while (true) {
+        // read distance sensor
+        distance = sonar.ping(
+            DigitalPin.P1,
+            DigitalPin.P2,
+            PingUnit.Centimeters
+        )
+
+        if (distance < 10) {
+            // Reverse 10 cm
+            robotbit.StpCarMove(-10, 48)
+            basic.pause(200)
+
+            // Turn 90 degrees
+            robotbit.StpCarTurn(90, 48, 48)
+            basic.pause(200)
+        } else {
+            // Otherwise move forward
+            robotbit.StpCarMove(1, 48)
+        }
+    }
+})
